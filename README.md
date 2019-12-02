@@ -26,6 +26,7 @@ var starsites = ['liaoxuefeng.com','shihu.com'];
 1. 直聘网
 2. 猎聘网
 3. 拉勾网
+4. 51job
 
 用户可以修改默认配置项，这样就不用在翻页后重新修改筛选条件了。
 

@@ -2,8 +2,8 @@
 // @name         GoogleFilter
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  Google search result filter and marker
-// @author       Joysee
+// @description  Google search result filter and marker.(deprecated! pls user searchfilter.js)
+// @author       Joyeah
 // @match        https://www.google.com/search?*
 // @grant        none
 // ==/UserScript==
@@ -15,7 +15,7 @@ var trashsites = [
 //垃圾站点信息处理方式：remove-移除, gray-变灰
 var trash_action = 'remove';
 //星标网站
-var starsites = ['liaoxuefeng.com','shihu.com'];
+var starsites = ['liaoxuefeng.com','zhihu.com'];
 
 (function() {
     'use strict';

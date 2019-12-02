@@ -1,6 +1,6 @@
 # 油猴脚本(持续更新)
 
-## googlefilter
+## googlefilter（deprecated）
 
 对谷歌搜索内容进行筛选处理，将不喜欢的站点的内容置灰，将喜欢的网站条目前加★。用户可以自行修改脚本中的几个配置项，增加自己的喜好设置。
 
@@ -14,6 +14,22 @@ var trash_action = 'remove';
 //星标网站
 var starsites = ['liaoxuefeng.com','shihu.com'];
 ```
+
+## searchfilter
+
+多个搜索引擎搜索结果的筛选处理，将不喜欢的站点的内容置灰，将喜欢的网站条目前加★。用户可以自行修改脚本中的几个配置项，增加自己的喜好设置。
+
+涉及站点：
+
+google.com
+
+baidu.com
+
+cn.bing.com
+
+yandex.com(待开发)
+
+fuckoffgoogle.net(待开发)
 
 
 

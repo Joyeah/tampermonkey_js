@@ -14,12 +14,10 @@
 var conds = {};
 conds.sentences = [
   '这个工具还不错', 
-  'IT是技术革新的引擎',
-  '技术无止境', 
-  '需求无止境', 
+  'IT是技术革新的引擎,需求无止境',
   '技能培训有很大的市场空间，教育产业化规范化。'
 ];
-//处理逻辑：点击“立即合成”，通过改变样式后，再次模拟点击滑块；语音生成后，再发起缓存文件获得程序
+//处理逻辑：点击“立即合成”，通过改变样式让滑块相关Dom设置移动最终位置，再次模拟点击滑块；语音生成后，再发起缓存文件获得程序
 //技术参考：https://www.cnblogs.com/likers/p/3937472.html
 //http://www.voidcn.com/article/p-thpduaxe-bsb.html
 
@@ -51,6 +49,18 @@ function filter(options) {
   if (rows.length > 0) {
     show()
   }
+}
+/**
+ * #nls-tts-demo-nc 内的内容操作
+ * 数字是每次点击后加1
+ */
+function slide() {
+  $('.nls-tts-demo-submit').click(); //播放按钮
+  $('#nc_1_n1z').attr('style', 'left:258px');
+  $('#nc_1__bg').attr('style', 'width:258px');
+  $('#nc_1_n1z').click(); //not work
+  $('#nc_1_n1z').trigger('click'); //not work
+  
 }
 
 function redo_filter() {

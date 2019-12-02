@@ -193,13 +193,20 @@ function initDialog() {
   $(html_1).append(`<label class="lbl"><button id="__search">筛选</button></label>`);
   $(html_1).appendTo(html);
   html.append('<div id="__content" ></div>')
-  html.append(`<label class="lbl"><button id="__nextpage">下一页</button></label>`);
+  html.append(`<div class="lbl"><button id="__nextpage" style="background-color: #00b38a;color: #fff;">下一页</button></div>`);
   html.append('<textarea id="__data" rows=8 style="width:99%;"></textarea>');
   $('body').append(html);
 
   $('#__search').click(function (e) {
     e.preventDefault();
     redo_filter();
+  });
+  $('#__words').keydown(function (e) {
+    //空格 32   Enter 13   ESC 27 逗号188、229
+    // console.log(e.keyCode);
+    if (e.keyCode == 32 || e.keyCode == 13 || e.keyCode == 27 || e.keyCode == 118 || e.keyCode == 229) {
+      redo_filter();
+    }
   });
   $('#__nextpage').click(function (e) {
     e.preventDefault();

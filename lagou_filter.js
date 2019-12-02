@@ -5,7 +5,7 @@
 // @version      0.1
 // @description  拉勾网岗位筛选器,对搜索结果进行二次过滤
 // @author       Joyeah
-// @match        https://www.lagou.com/jobs/list_/p-city*?px=new&district=*
+// @match        https://www.lagou.com/jobs/list_/p-city*
 // @require      https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js
 // @grant        none
 // ==/UserScript==

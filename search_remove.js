@@ -69,7 +69,7 @@ function bing_search(){
     var href = location.href;
     var q = document.querySelector('#sb_form_q');
     if (q.value){
-        if(href.indexOf('+-')){
+        if(href.indexOf('+-') > 0){
             return ;
         }else{
             q.value = q.value + '  ' + filterstr;
@@ -87,7 +87,7 @@ function baidu_search(){
     var href = location.href;
     var q = document.querySelector('#kw');
     if (q.value){
-        if(href.indexOf('+-')){
+        if(href.indexOf('+-') > 0){
             return ;
         }else{
             q.value = q.value + '  ' + filterstr;

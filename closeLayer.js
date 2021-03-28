@@ -2,7 +2,7 @@
 // @name         移除变态的弹窗
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  移除变态的弹窗。也可以通过配置自己的地址栏搜索引擎来简单实现。
 // @author       You
 // @match        *.zhihu.com/*
 // @match        https://www.csdn.com/*

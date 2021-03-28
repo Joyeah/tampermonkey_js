@@ -53,7 +53,7 @@ function google_search(){
         if(href.indexOf('op=') && href.indexOf(filters[0])>0){
             return ;
         }else{
-            q.value = q.value||'' + '  ' + filterstr;
+            q.value = q.value + '  ' + filterstr;
         }
         document.querySelector('[type=submit]').click();
     }else{
@@ -72,7 +72,7 @@ function bing_search(){
         if(href.indexOf('+-')){
             return ;
         }else{
-            q.value = q.value||'' + '  ' + filterstr;
+            q.value = q.value + '  ' + filterstr;
         }
         document.querySelector('[type=submit]').click();
     }else{
@@ -90,7 +90,7 @@ function baidu_search(){
         if(href.indexOf('+-')){
             return ;
         }else{
-            q.value = q.value||'' + '  ' + filterstr;
+            q.value = q.value + '  ' + filterstr;
         }
         document.querySelector('[type=submit]').click();
     }else{

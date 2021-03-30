@@ -2,14 +2,13 @@
 // @name         移除变态的弹窗
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  移除变态的弹窗。也可以通过配置自己的地址栏搜索引擎来简单实现。
+// @description  移除变态的弹窗。
 // @author       You
 // @match        *.zhihu.com/*
 // @match        https://www.csdn.com/*
 // @match        https://www.360.cn/*
 // @match        https://wenku.baidu.com/*
 // @match        https://blog.51cto.com/*
-// @match        https://blog..com/*
 // @grant        none
 // ==/UserScript==
 

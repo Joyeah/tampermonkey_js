@@ -10,6 +10,8 @@
 // @grant        GM_download
 // ==/UserScript==
 
+// 注意：将下载询问关闭，设置默认保存位置
+
 (function() {
     'use strict';
 

@@ -21,7 +21,10 @@
     }else{
         initDialog();
         setTimeout(function(){
-            analyzeCurrentPage();
+            var info = getImageInfo();
+            if(info && info.text){
+                showImageInfo(info);
+            }
         },2000);
     }    
 })();
@@ -33,7 +36,6 @@
 function analyzeCurrentPage(){
     var info = getImageInfo();
     if(info && info.text){
-        showImageInfo(info);
         saveInfo(info);
         var nav = document.getElementById('leftNav');
         if(nav && nav.classList.contains('disabled')){
@@ -139,8 +141,8 @@ function showImageInfo(info){
     _father.appendChild(row2);
     _father.appendChild(row3);
     var btn = document.createElement('button');
-    btn.innerText = '保存';
-    btn.addEventListener('click', saveInfo);
+    btn.innerText = '解析所有页面';
+    btn.addEventListener('click', analyzeCurrentPage);
     _father.appendChild(btn);
   }
 

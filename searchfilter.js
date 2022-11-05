@@ -18,7 +18,7 @@
 
 //垃圾网站
 var trashsites = [
-    'baidu.com', 'csdn.net', '360.cn',
+    'baidu.com', 'csdn.net','csdn.com','oschina.net', '360.cn','tencent.com','aliyun.com','huaweicloud.com','oschina'
 ];
 //垃圾站点信息处理方式：remove-移除, gray-变灰
 var trash_action = 'gray';
@@ -50,6 +50,7 @@ function bingfilter() {
     for (var i = 0; i < rs.length; i++) {
         var h = rs[i].getElementsByTagName('h2')[0];
         var cite = rs[i].getElementsByTagName('cite')[0];
+        if(!cite) continue;
         var exist = trashsites.filter((item, idx) => { return cite.textContent.indexOf(item) != -1 });
         if (exist.length > 0) {
             if (trash_action == 'gray') {

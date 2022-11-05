@@ -10,6 +10,10 @@
 // @grant        none
 // ==/UserScript==
 
+/**
+ * todo 将图片地址保存到json，每月一个。
+ */
+
 (function() {
     'use strict';
 

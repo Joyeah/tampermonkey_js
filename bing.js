@@ -4,8 +4,7 @@
 // @version      0.1
 // @description  try to make the world beautiful!
 // @author       Joysong
-// @match        https://*.bing.com
-// @match        https://*.bing.com/*
+// @match        https://*.bing.com/?mkt*
 // @match        https://*/th?id=*
 // @grant        none
 // ==/UserScript==

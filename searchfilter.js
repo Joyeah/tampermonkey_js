@@ -29,12 +29,13 @@ var starsites = ['liaoxuefeng.com', 'zhihu.com'];
     'use strict';
     var href = document.location.href;
     if (href.startsWith('https://cn.bing.com/')) {
-        bingfilter();
+        setTimeout(() => {
+            bingfilter();
+        }, 800);
     } else if (href.startsWith('https://www.baidu.com/')) {
-        baidufilter();
         setTimeout(() => {
             baidufilter();
-        }, 300);
+        }, 500);
     } else if (href.startsWith('https://www.google.com/search')) {
         googlefilter();
     } else if (href.startsWith('https://search.fuckoffgoogle')) {
@@ -99,20 +100,31 @@ function baidufilter() {
         if (rs[i].innerText.endsWith('广告')) {
             rs[i].innerHTML = '';
         }
+        if(rs[i].getAttribute('mu')){
+            const mu = rs[i].getAttribute('mu');
+            let arr = trashsites.filter((item, idx) => { return mu.indexOf(item) != -1 });
+            if(arr.length){
+                if (trash_action == 'gray') {
+                    let titles = rs[i].getElementsByClassName('c-title')
+                    if(titles.length){
+                        titles[0].children[0].style.color = 'lightgray'; //alink
+                    }
+                
+                } else {
+                    rs[i].innerHTML = '';
+                }
+                continue;
+            }
+        }
         var h = rs[i].getElementsByTagName('h3')[0];
         var cite = h.children[0].href;
-        var exist = trashsites.filter((item, idx) => { return cite.textContent.indexOf(item) != -1 });
+        var exist = trashsites.filter((item, idx) => { return cite.indexOf(item) != -1 });
         if (exist.length > 0) {
             if (trash_action == 'gray') {
-                cite.style.color = 'lightgray';
-                h.style.color = 'lightgray';
-                h.children[0].style.color = 'lightgray'; //alink
-                var ems = rs[i].getElementsByTagName('em');
-                for (var j = 0; j < ems.length; j++) {
-                    ems[j].style.color = 'lightgray';
+                let titles = rs[i].getElementsByClassName('c-title')
+                if(titles.length){
+                    titles[0].children[0].style.color = 'lightgray'; //alink
                 }
-
-                rs[i].getElementsByClassName('c-abstract')[0].style.color = 'lightgray';
             } else {
                 rs[i].innerHTML = '';
             }

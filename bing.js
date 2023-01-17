@@ -6,7 +6,9 @@
 // @author       Joysong
 // @match        https://*.bing.com/?mkt*
 // @match        https://*/th?id=*
-// @grant        none
+// @match        https://cn.bing.com/*
+// @grant        GM_notification
+// @grant        GM_download
 // ==/UserScript==
 
 /**
@@ -19,6 +21,8 @@
     let href = window.location.href;
     if(href.indexOf('/th?id=')> 0 ){
         //todo save image
+        let filename = href.substring(href.indexOf('id=')+3);
+        GM_download({url:href, name: filename,onload:finishDown})
     }else{
         initDialog();
         setTimeout(function(){
@@ -26,9 +30,29 @@
             if(info && info.text){
                 showImageInfo(info);
             }
-        },3000);
-    }    
+        },2000);
+    }
 })();
+
+/**
+ * 处理当前页
+ * @returns
+ */
+function analyzeCurrentPage(){
+    var info = getImageInfo();
+    if(info && info.text){
+        saveInfo(info);
+        var nav = document.getElementById('leftNav');
+        if(nav && nav.classList.contains('disabled')){
+            return;
+        }else{
+            nav.click();//上一页
+            setTimeout(() => {
+                analyzeCurrentPage();
+            }, 1500);
+        }
+    }
+}
 
 function getImageInfo(){
     //注：只有浏览器放大显示，会显示.img_uhd
@@ -45,7 +69,7 @@ function getImageInfo(){
     div = document.querySelector('.img_uhd'); //大图:当浏览器放大显示时（即超过100%）会插入此大图
     if(div&&div.style){
         let url = div.style.backgroundImage||div.style.background;
-        if(url){
+        if(url && url.includes('url(')){
             url = url.substr('url("'.length);
             url = url.substring(0, url.indexOf('&'))
         }
@@ -104,7 +128,7 @@ function showImageInfo(info){
 
   function initDialog() {
     //loadStyles('https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css');
-    loadStyleString('.tm_layer{display: block;position: fixed;top: 30px;right: 15px;width:300px;height:200px;background-color: lightgray;}\
+    loadStyleString('.tm_layer{display: block;z-index:9999;position: fixed;top: 30px;right: 15px;width:300px;height:200px;background-color: lightgray;}\
         .tm_btn{display: inline-block;color: darkblue;background-color: lightskyblue;border-radius: 5px;padding: 2px;} \
         .lbl{display:flex; justify-content:space-between;}.lbl>input{flex-grow:1;}');
 
@@ -122,17 +146,23 @@ function showImageInfo(info){
     _father.appendChild(row2);
     _father.appendChild(row3);
     var btn = document.createElement('button');
-    btn.innerText = '保存';
-    btn.addEventListener('click', saveInfo);
+    btn.innerText = '解析页面';
+    btn.addEventListener('click', analyzeCurrentPage);
     _father.appendChild(btn);
   }
 
-  function saveInfo(){
-      var info = {};
-      info.text = document.querySelector('#img_text').text;
-      info.img_fit = document.querySelector('#img_fit').text;
-      info.img_big = document.querySelector('#img_big').text;
-      alert(JSON.stringify(info));
-      //todo save info 
+  function saveInfo(info){
+    //   var info = {};
+    //   info.text = document.querySelector('#img_text').text;
+    //   info.img_fit = document.querySelector('#img_fit').text;
+    //   info.img_big = document.querySelector('#img_big').text;
+    //   alert(JSON.stringify(info));
+      let url = info.img_big;
+      let fname = url.substring(url.indexOf('id=')+3);
+      GM_download({url:url, name:fname, finishDown});
   }
 
+function finishDown(a,b){
+    console.log(a,b)
+    GM_notification(a, `保存提示`)
+}

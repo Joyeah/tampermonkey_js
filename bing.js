@@ -6,7 +6,8 @@
 // @author       Joysong
 // @match        https://*.bing.com/?mkt*
 // @match        https://*/th?id=*
-// @match        https://cn.bing.com/*
+// @match        https://cn.bing.com/#
+// @match        https://cn.bing.com
 // @grant        GM_notification
 // @grant        GM_download
 // ==/UserScript==

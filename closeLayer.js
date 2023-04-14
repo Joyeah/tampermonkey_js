@@ -1,14 +1,15 @@
 // ==UserScript==
-// @name         移除变态的弹窗
+// @name         移除变态的弹窗和广告
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  移除变态的弹窗。
+// @description  移除变态的弹窗和广告。
 // @author       You
 // @match        *.zhihu.com/*
 // @match        https://www.csdn.com/*
 // @match        https://www.360.cn/*
 // @match        https://wenku.baidu.com/*
 // @match        https://blog.51cto.com/*
+// @match        https://www.jianshu.com/p/*
 // @grant        none
 // ==/UserScript==
 
@@ -30,8 +31,8 @@
         execFuncMulti(remove51ctoLayer, [1000,2000,3000]);
         //当下拉滚动时，会再次出现弹窗
         //registEvent();
-    }else if(location.href.indexOf('abc.com')>0){
-
+    }else if(location.href.indexOf('jianshu.com')>0){
+        execFuncMulti(removeJianshuAds, [500, 1000])
     }else{
         execFuncMulti(removeLayer, [1000,2000,3000]);
     }
@@ -75,4 +76,11 @@ function remove51ctoLayer() {
     var b = document.querySelector('.close_icon');
     if(b) b.click();
 }
-
+function removeJianshuAds() {
+    var ads = document.querySelectorAll('div[style*="fixed"]');
+    if(ads && ads.length > 0){
+        ads.forEach(element => {
+            element.remove();
+        });
+    }
+}

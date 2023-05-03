@@ -158,9 +158,15 @@ function showImageInfo(info){
     //   info.img_fit = document.querySelector('#img_fit').text;
     //   info.img_big = document.querySelector('#img_big').text;
     //   alert(JSON.stringify(info));
-      let url = info.img_big;
-      let fname = url.substring(url.indexOf('id=')+3);
-      GM_download({url:url, name:fname, finishDown});
+    if(info.img_big){
+        let url = info.img_big;
+        let fname = url.substring(url.indexOf('id=')+3);
+        GM_download({url:url, name:fname, finishDown});
+    }else if (info.img_fit){
+        let url = info.img_fit;
+        let fname = url.substring(url.indexOf('id=')+3);
+        GM_download({url:url, name:fname, finishDown});
+    }
   }
 
 function finishDown(a,b){

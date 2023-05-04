@@ -9,6 +9,7 @@
 // @include      https://search.fuckoffgoogle.*
 // @include      https://www.baidu.com/s*
 // @include      https://cn.bing.com/search?q=*
+// @include      https://www.bing.com/search?q=*
 // @include      https://yandex.com/search/?text=*
 // @include      https://www.google.com/search*
 // @run_at       document_end
@@ -28,10 +29,13 @@ var starsites = ['liaoxuefeng.com', 'zhihu.com'];
 (function () {
     'use strict';
     var href = document.location.href;
-    if (href.startsWith('https://cn.bing.com/')) {
+    if (href.startsWith('https://cn.bing.com/')||href.startsWith('https://www.bing.com/')) {
         setTimeout(() => {
             bingfilter();
         }, 800);
+        setTimeout(() => {
+            bingfilter();
+        }, 2000);
     } else if (href.startsWith('https://www.baidu.com/')) {
         setTimeout(() => {
             baidufilter();
@@ -46,9 +50,15 @@ var starsites = ['liaoxuefeng.com', 'zhihu.com'];
 })();
 
 function bingfilter() {
-    var arr = [];
-    var rs = document.querySelectorAll('.b_algo');
-    for (var i = 0; i < rs.length; i++) {
+    let arr = [];
+    // let rs = document.querySelectorAll('.b_algo');
+    let rs = document.querySelector('#b_results').children;
+    for (var i = rs.length-1; i >= 0; i--) {
+        //remove AD
+        if (rs[i].classList.contains('b_ad')){
+            rs[i].remove();
+        }
+
         var h = rs[i].getElementsByTagName('h2')[0];
         var cite = rs[i].getElementsByTagName('cite')[0];
         if(!cite) continue;
@@ -60,7 +70,8 @@ function bingfilter() {
                 h.children[0].style.color = 'lightgray'; //alink
                 rs[i].getElementsByClassName('b_caption')[0].style.color = 'lightgray'; //text
             } else {
-                arr.push(rs[i]);
+                //trash_action == 'remove'
+                rs[i].remove();
             }
             continue;
         }
@@ -73,13 +84,6 @@ function bingfilter() {
             h.insertAdjacentElement('afterBegin', sp); //在h3内的前面添加标记
         }
 
-    }
-    // 移除垃圾站点信息
-    if (trash_action == 'remove') {
-        for (let i = 0; i < arr.length; i++) {
-            const element = arr[i];
-            element.remove();
-        }
     }
 }
 function baidufilter() {

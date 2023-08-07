@@ -17,7 +17,6 @@
 
     let href = window.location.href;
     if(href.indexOf('/th?id=')> 0 ){
-        //todo save image
         let filename = href.substring(href.indexOf('id=')+3);
         GM_download({url:href, name: filename,onload:finishDown})
     }else{
@@ -74,8 +73,10 @@ function getImageInfo(){
     }
 
     div = document.querySelector('.musCardCont');
-    //info.text = div.children[3].text;
-    info.text = div.querySelector('a.title').text;
+    if(div){
+      //info.text = div.children[3].text;
+      info.text = div.querySelector("a.title").text;
+    }
     return info;
 }
 

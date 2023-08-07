@@ -1,0 +1,1 @@
+el = document.querySelector("Question-mainColumn");

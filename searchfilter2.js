@@ -1,18 +1,18 @@
 // ==UserScript==
-// @name         SearchFilter
-// @namespace    http://tampermonkey.net/
+// @name         SearchExcluder
+// @namespace    https://gitlab.com/joysong
 // @version      0.1
-// @description  Google search result filter and marker
-// @author       Joyeah
+// @description  search result exclude something 
+// @description_cn 设置搜索排除关键词（可以站点或关键词)
+// @author       Joysong
 // @grant        none
 // @license      GPL License
 // @include      https://search.fuckoffgoogle.*
-// @include      https://www.baidu.com/
-// @include      https://www.baidu.com/s*
-// @include      https://cn.bing.com/search?q=*
-// @include      https://www.bing.com/search?q=*
-// @include      https://yandex.com/search/?text=*
-// @include      https://www.google.com/search*
+// @include      https://www.baidu.com/*
+// @include      https://cn.bing.com/*
+// @include      https://www.bing.com/*
+// @include      https://yandex.com/*
+// @include      https://www.google.com/*
 // @run_at       document_end
 
 
@@ -37,7 +37,7 @@ var starsites = ['liaoxuefeng.com', 'zhihu.com'];
         setTimeout(() => {
             bingfilter();
         }, 2000);
-    } else if (href.includes('baidu.com/')) {
+    } else if (href.startsWith('https://www.baidu.com/')) {
         setTimeout(() => {
             baidufilter();
         }, 500);
@@ -88,11 +88,6 @@ function bingfilter() {
     }
 }
 function baidufilter() {
-    var q = document.querySelector('input').value;
-    if(!q || ! q.includes(`-${trashsites[0]}`)){
-        document.querySelector('input').value = '  ' + trashsites.join(' -')
-    }
-
     var rs = document.getElementById('content_left').children;
     for (var i = rs.length-1; i >= 0; i--) {
         var c = rs[i].classList[0];

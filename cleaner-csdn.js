@@ -37,7 +37,7 @@ denyEvent();
   
   intl = setInterval(clean, 2000);
   setTimeout(()=>{
-    clearInterval(intl);
+    // clearInterval(intl);
     // removeAllEvtListeners();
     cleanCssSelectNone();
   }, 15000)
@@ -77,6 +77,7 @@ function cleanLoginDeny(){
     //remove event litener
     delEvtListeners(item)
   })
+  document.querySelector(".passport-login-container").remove();
 }
 
 function removeAllEvtListeners(){
@@ -151,7 +152,7 @@ function clean() {
 
   //login iframe 
   document.querySelectorAll("iframe").forEach((iframe) => iframe.remove()); 
-
+  //document.querySelector(".passport-login-container").remove();
   //click事件
   document.querySelectorAll('code').forEach(d=>{
     d.removeAttribute('onclick');

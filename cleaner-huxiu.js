@@ -13,8 +13,20 @@
     'use strict';
     
     setInterval(clean, 3000);
+    removeOnce();
 })();
 
+function removeOnce() {
+  // document.querySelectorAll(".viewer-container").forEach((e) => e.remove());
+
+  // var ee = document.querySelectorAll("section");
+  // ee.forEach((e) => e.remove());
+
+  // for (let i = document.scripts.length - 1; i >= 0; i--) {
+  //   const element = document.scripts[i];
+  //   element.remove();
+  // }
+}
 function clean(){
   var e = document.querySelector("#header-nav");
   if (e) {

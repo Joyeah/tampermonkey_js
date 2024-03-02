@@ -5,6 +5,7 @@
 // @description  解决禁止选择复制的问题
 // @author       You
 // @match        https://zhuanlan.zhihu.com/p/*
+// @match        https://zhuanlan.zhihu.com/pquestion/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=zhihu.com
 // @grant        none
 // ==/UserScript==
@@ -38,10 +39,13 @@ denyEvent();
     'use strict';
     moveToRoot();
     removeClass();
+    
+    var intvl1 = setInterval(removeSide, 3000);
     var intvl2 = setInterval(removeScripts, 1000);
     var intvl3 = setInterval(removeOtherNodes, 2000);
 
     setTimeout(()=>{
+        clearInterval(intvl1);
         clearInterval(intvl2);
         clearInterval(intvl3);
     }, 20000);    
@@ -53,6 +57,8 @@ function moveToRoot(){
     // var article2 = article.cloneNode(true);
     // article.remove();
     document.body.appendChild(article);
+    if(article.nextSibling) article.nextSibling.remove();
+    if (article.previousSibling) article.previousSibling.remove();
 }
 
 /**
@@ -66,6 +72,14 @@ function removeClass(){
     document.body.classList.forEach(item=>{
         document.body.classList.remove(item);
     })
+}
+function removeSide(){
+  try {
+    document.querySelector('header').remove();
+    document.querySelector('.Question-sideColumn').remove();
+  } catch (error) {
+    console.error(error);
+  }
 }
 function removeOtherNodes() {
       var divs = document.body.childNodes;

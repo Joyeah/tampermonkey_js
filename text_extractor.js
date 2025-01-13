@@ -5,7 +5,10 @@
 // @description  Article Content Text Extractor
 // @author       You
 // @include         https://blog.creaders.net/u/*.html
+// @include        http://localhost*
 // @include        https://www.msn.cn/zh-cn/*
+// @include        https://www.huxiu.com/moment/
+// @include        https://www.zhihu.com/question/*/answer/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=creaders.net
 // @grant        none
 // ==/UserScript==
@@ -22,6 +25,12 @@ function analyzeCurrentPage(){
       blog_creaders();
     } else if (href.startsWith("https://www.msn.cn/zh-cn/news/")) {
       msn_cn();
+    } else if (href.startsWith("https://www.huxiu.com/moment/")) {
+      huxiu_moment();
+    } else if (href.startsWith("https://www.zhihu.com/question/")) {
+      zhihu_question();
+    } else {
+      document.getElementById("row1").textContent = document.body.textContent;
     }
     
 }
@@ -34,6 +43,7 @@ function blog_creaders(){
     ps.forEach(e=>arr.push(e.textContent));
     try {
         document.getElementById("row1").textContent = arr.join('\n');
+        document.querySelector("#row1").select();
     } catch (error) {
         console.error(error)
     }
@@ -51,6 +61,33 @@ function msn_cn() {
  
   try {
     document.getElementById("row1").textContent = arr.join("\n");
+    document.querySelector("#row1").select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function huxiu_moment(){
+  var arr = [];
+  var texts = document.querySelectorAll(".plain-text-wrap");
+  texts.forEach(e => arr.push(e.innerText));
+  try {
+    document.getElementById("row1").textContent = arr.join("\n");
+    // document.getElementById("row1").ariaSelected();
+    document.querySelector("#row1").select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+function zhihu_question(){
+  var arr = [];
+  var texts = document.querySelectorAll(".RichContent-inner p");
+
+  texts.forEach(e => arr.push(e.innerText));
+  try {
+    document.getElementById("row1").textContent = arr.join("\n");
+    // document.getElementById("row1").ariaSelected();
+    document.querySelector("#row1").select();
   } catch (error) {
     console.error(error);
   }
@@ -60,30 +97,71 @@ function msn_cn() {
 // TTS
 // ref: https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/
 const synth = window.speechSynthesis;
-const voices = synth.getVoices().filter((e) => e.name.includes("Natural") && e.name.includes("Chinese"));
+// const voices = synth.getVoices().filter((voice) => voice.name.includes("Natural") && voice.name.includes("Chinese")); 
+// const voices = synth.getVoices().filter((voice) => voice.localService == true && voice.lang == 'zh-CN');
 // voices.filter(e=>e.name.includes('Xiaoxiao'))
 function speak() {
   if (synth.speaking) {
-    console.error("speechSynthesis.speaking");
-    return;
+    console.warn("speechSynthesis.speaking, pause..");
+    pauseSpeech();
+    return
   }
   const txt = document.getElementById("row1").textContent;
-  if (txt !== "") {
-    const utterThis = new SpeechSynthesisUtterance(txt);
+  if (txt == "") {
+    alert("No text to speak");
+    return
+  }
+  const utterThis = new SpeechSynthesisUtterance(txt);
 
-    utterThis.onend = function (event) {
-      console.log("SpeechSynthesisUtterance.onend");
-    };
+  utterThis.onend = function (event) {
+    console.log("SpeechSynthesisUtterance.onend");
+  };
 
-    utterThis.onerror = function (event) {
-      console.error("SpeechSynthesisUtterance.onerror");
-    };
+  utterThis.onerror = function (event) {
+    console.error("SpeechSynthesisUtterance.onerror");
+  };
 
-    var i = (voices.length * Math.random()).toFixed();
-    utterThis.voice = voices[i];
-    utterThis.pitch = 1;
-    utterThis.rate = 1;
-    synth.speak(utterThis);
+  // let voices = synth.getVoices().filter((voice) => voice.localService == true && voice.lang == 'zh-CN'); //本机地语音引擎
+  // let voices = synth.getVoices().filter((voice) => voice.name.includes("Natural") && voice.name.includes("Chinese"));
+  let lang = getLangValue()
+  let voices = synth.getVoices().filter((voice) => voice.lang == lang);
+
+  var i = (voices.length * Math.random()).toFixed();
+  
+  utterThis.voice = voices[i];
+  utterThis.pitch = 1.5;
+  utterThis.rate = 1.3;
+  console.log(utterThis.voice.name)
+  synth.speak(utterThis);
+  document.getElementById("btn2").innerText = "⏸️";
+}
+
+function getLangValue(){
+	var radios = document.getElementsByName('lang');
+	for (var i = 0, length = radios.length; i < length; i++) {
+		if (radios[i].checked) {
+			return radios[i].value;
+		}
+	}
+}
+
+function stopSpeech() {
+  document.getElementById("btn2").innerText = "▶️";
+  synth.cancel();
+}
+function pauseSpeech() {
+  document.getElementById("btn2").innerText = "▶️";
+  synth.pause();
+}
+function resumeSpeech() {
+  document.getElementById("btn2").innerText = "⏸️";
+  synth.resume();
+}
+function toggleSpeech() {
+  if (synth.paused) {
+    resumeSpeech();
+  } else {
+    pauseSpeech();
   }
 }
 //end TTS
@@ -114,8 +192,8 @@ function speak() {
     //loadStyles('https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css');
     loadStyleString(
       ".tm_layer{z-index:9999;display: block;position: fixed;top: 30px;right: 15px;width:300px;height:200px;background-color: lightgray;}\
-        .tm_btn{display: inline-block;color: darkblue;background-color: lightskyblue;border-radius: 5px;padding: 2px;} \
-        .lbl{display:flex; justify-content:space-between;}.lbl>input{flex-grow:1;}"
+        .tm_layer>button{color: #ffffff;background-color: #00a6ed;border-radius: 5px;padding: 2px;} \
+        .tm_layer>input{}"
     );
 
     var _father = document.createElement("div");
@@ -128,14 +206,58 @@ function speak() {
     _father.appendChild(row1);
 
     var btn1 = document.createElement("button");
+    btn1.id = "btn1";
+    btn1.setAttribute('type', 'button');
+    btn1.classList.add(["Button", "Button--primary", "Button--blue"]);
     btn1.innerText = "提取文字";
     btn1.addEventListener("click", analyzeCurrentPage);
     _father.appendChild(btn1);
 
     var btn2 = document.createElement("button");
-    btn2.innerText = "语音播放";
+    btn2.id = "btn2";
+    btn2.innerText = "▶️";
     btn2.addEventListener("click", speak);
     _father.appendChild(btn2);
+
+    var btn3 = document.createElement("button");
+    btn3.id = "btn3";
+    btn3.innerText = "⏹️";
+    btn3.addEventListener("click", stopSpeech);
+    _father.appendChild(btn3);
+
+    var radio1 = document.createElement("input");
+    radio1.type = "radio";
+    radio1.id = "radio1";
+    radio1.name = "lang"
+    radio1.value = "zh-CN"
+    radio1.setAttribute('checked', 'checked')
+    _father.appendChild(radio1);
+    var label1 = document.createElement("label");
+    label1.setAttribute('for', 'radio1')
+    label1.innerText = "普通话";
+    _father.appendChild(label1);
+
+    var radio2 = document.createElement("input");
+    radio2.type = "radio";
+    radio2.id = "radio2";
+    radio2.name = "lang"
+    radio2.value = "zh-TW"
+    _father.appendChild(radio2);
+    var label2 = document.createElement("label");
+    label2.setAttribute('for','radio2')
+    label2.innerText = "台語";
+    _father.appendChild(label2);
+
+    var radio3 = document.createElement("input");
+    radio3.type = "radio";
+    radio3.id = "radio3";
+    radio3.name = "lang"
+    radio3.value = "zh-HK"
+    _father.appendChild(radio3);
+    var label3 = document.createElement("label");
+    label3.setAttribute('for','radio3')
+    label3.innerText = "粤語";
+    _father.appendChild(label3);
   }
 
 var dom = document.querySelector("tm_layer");

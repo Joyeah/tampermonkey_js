@@ -10,6 +10,7 @@
 // @match        https://wenku.baidu.com/*
 // @match        https://blog.51cto.com/*
 // @match        https://www.jianshu.com/p/*
+// @match        https://*
 // @grant        none
 // ==/UserScript==
 
@@ -34,7 +35,7 @@
     }else if(location.href.indexOf('jianshu.com')>0){
         execFuncMulti(removeJianshuAds, [500, 1000])
     }else{
-        execFuncMulti(removeLayer, [1000,2000,3000]);
+        execFuncMulti(removeLayer, [1000, 2000, 3000, 10000]);
     }
 })();
 /**
@@ -42,15 +43,16 @@
  */
 function removeLayer(){
     //检测关闭按钮
-    arr = document.querySelectorAll('[class*="close"]');
+    let arr = document.querySelectorAll('[class*="close"]');
     for(var i=arr.length-1;i>=0;i--){
-        dom = arr[i];
+        let dom = arr[i];
         if(dom.click) {
             dom.click();
         }
     }
     //检测mask
-    
+    //google ads ins:
+    document.querySelectorAll("ins").forEach((e) => e.remove());
 }
 /**延时执行多次方法*/
 function execFuncMulti(func,delayTimes){

@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         SearchFilter
+// @name         Z-SearchFilter
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Google search result filter and marker
@@ -59,7 +59,15 @@ function bingfilter() {
         if (rs[i].classList.contains('b_ad')){
             rs[i].remove();
         }
-
+        var p = rs[i].querySelector('p');
+        var before = window.getComputedStyle(p, '::before');
+        if(before){
+            rs[i].remove();
+            // var content = before.getPropertyValue('content');
+            // if(content && content.contains('url')){
+            //     rs[i].remove();
+            // }
+        }
         var h = rs[i].getElementsByTagName('h2')[0];
         var cite = rs[i].getElementsByTagName('cite')[0];
         if(!cite) continue;

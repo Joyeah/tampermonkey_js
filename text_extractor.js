@@ -3,12 +3,15 @@
 // @namespace    http://tampermonkey.net/
 // @version      2024-02-18
 // @description  Article Content Text Extractor
-// @author       You
+// @description_cn  文本提取
+// @author       Yusen
 // @include         https://blog.creaders.net/u/*.html
-// @include        http://localhost*
-// @include        https://www.msn.cn/zh-cn/*
+// @include        https://wallstreetcn.com/articles/*
+// @include        https://www.msn.cn/zh-cn/news/*
 // @include        https://www.huxiu.com/moment/
 // @include        https://www.zhihu.com/question/*/answer/*
+// @include        https://chinadigitaltimes.net/*.html
+// @include        https://world.huanqiu.com/article/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=creaders.net
 // @grant        none
 // ==/UserScript==
@@ -29,7 +32,13 @@ function analyzeCurrentPage(){
       huxiu_moment();
     } else if (href.startsWith("https://www.zhihu.com/question/")) {
       zhihu_question();
-    } else {
+    } else if (href.startsWith("https://chinadigitaltimes.net/")) {
+      chinadigitaltimes();
+    } else if (href.startsWith("https://wallstreetcn.com/")) {
+      wallstreetcn();
+    } else if (href.startsWith("https://world.huanqiu.com/article")) {
+      huanqiu()
+    } else if (href.startsWith("http://127.0.0.1")) {
       document.getElementById("row1").textContent = document.body.textContent;
     }
     
@@ -86,6 +95,23 @@ function zhihu_question(){
   texts.forEach(e => arr.push(e.innerText));
   try {
     document.getElementById("row1").textContent = arr.join("\n");
+    // document.getElementById("row1").ariaSelected();
+    document.querySelector("#row1").select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function chinadigitaltimes(){
+  // var arr = [];
+  // var texts = document.querySelectorAll(".post-content p");
+  // texts.forEach(e => arr.push(e.innerText));
+  // var header = document.querySelector('.post-header h1 ').innerText
+  var header = document.querySelector('.post-header').innerText
+  var content = document.querySelector('.post-content').innerText
+
+  try {
+    document.getElementById("row1").textContent = `${header}\n${content}`
     // document.getElementById("row1").ariaSelected();
     document.querySelector("#row1").select();
   } catch (error) {
@@ -164,6 +190,41 @@ function toggleSpeech() {
     pauseSpeech();
   }
 }
+
+
+function wallstreetcn() {
+  var arr = [];
+  var texts = document.querySelector('article').innerText
+  try {
+    document.getElementById("row1").textContent = texts
+    // document.getElementById("row1").ariaSelected();
+    document.querySelector("#row1").select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+function huanqiu() {
+  // shadowRoot is closed cant
+  var arr = [];
+  const hostElement = document.querySelector('article-container-template');
+  try {
+    document.getElementById("row1").textContent = texts
+    // document.getElementById("row1").ariaSelected();
+    document.querySelector("#row1").select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function traverseShadowDOM(element) {
+  if (element.shadowRoot) {
+    console.log('Shadow Root内容:', element.shadowRoot.innerHTML);
+    // 递归遍历Shadow DOM中的子元素
+    element.shadowRoot.querySelectorAll('*').forEach(child => {
+      traverseShadowDOM(child);
+    });
+  }
+}
 //end TTS
 ////////////////////////////////////
 
@@ -212,6 +273,14 @@ function toggleSpeech() {
     btn1.innerText = "提取文字";
     btn1.addEventListener("click", analyzeCurrentPage);
     _father.appendChild(btn1);
+
+    var btn_sel = document.createElement("button");
+    btn_sel.id = "btn_sel";
+    btn_sel.setAttribute('type', 'button');
+    btn_sel.classList.add(["Button", "Button--primary", "Button--blue"]);
+    btn_sel.innerText = "全选复制";
+    btn_sel.addEventListener("click", document.getElementById("row1").select);
+    _father.appendChild(btn_sel);
 
     var btn2 = document.createElement("button");
     btn2.id = "btn2";
